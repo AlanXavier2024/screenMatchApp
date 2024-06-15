@@ -1,6 +1,6 @@
 package com.aluracursos.screenmatch.model;
 
-import com.aluracursos.screenmatch.service.ConsultaCHatGpt;
+
 import com.fasterxml.jackson.annotation.JsonAlias;
 import jakarta.persistence.*;
 
