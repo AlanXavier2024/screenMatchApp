@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 
 import java.security.PublicKey;
 import java.util.List;
+import java.util.Optional;
 import java.util.OptionalDouble;
 
 @Entity
@@ -20,7 +21,7 @@ public class Serie {
     private String titulo;
 
     private Integer totalTemporadas;
-    private double evaluacion;
+    private Double evaluacion;
     private String poster;
 
     @Enumerated(EnumType.STRING)
@@ -38,6 +39,7 @@ public class Serie {
         this.titulo = datosSerie.titulo();
         this.totalTemporadas = datosSerie.totalTemporadas();
         this.evaluacion = OptionalDouble.of(Double.valueOf(datosSerie.evaluacion())).orElse(0);
+//        this.evaluacion = Optional.ofNullable(datosSerie.evaluacion()).orElse(0.0);
         this.poster = datosSerie.poster();
         this.genero = Categoria.fromString(datosSerie.genero().split(", ")[0].trim());
         this.actores = datosSerie.actores();

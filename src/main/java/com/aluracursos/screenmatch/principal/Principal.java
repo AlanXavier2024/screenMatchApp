@@ -12,7 +12,8 @@ public class Principal {
     private Scanner teclado = new Scanner(System.in);
     private ConsumoAPI consumoApi = new ConsumoAPI();
     private final String URL_BASE = "https://www.omdbapi.com/?apikey=";
-    private final String API_KEY = "${OMDB_KEY}";
+//    private final String API_KEY = "99a2170f&t=";
+    private final String API_KEY = System.getenv("OMDB_KEY");
     private ConvierteDatos conversor = new ConvierteDatos();
     private List<DatosSerie> datosSeries = new ArrayList<>();
     private SerieRepository repositorio;
@@ -89,7 +90,7 @@ public class Principal {
     private DatosSerie getDatosSerie() {
         System.out.println("Escribe el nombre de la serie que deseas buscar");
         var nombreSerie = teclado.nextLine();
-        var json = consumoApi.obtenerDatos(URL_BASE + API_KEY+nombreSerie.toUpperCase().replace(" ", "+"));
+        var json = consumoApi.obtenerDatos(URL_BASE + API_KEY + nombreSerie.toUpperCase().replace(" ", "+"));
 //        System.out.println(json);
         DatosSerie datos = conversor.obtenerDatos(json, DatosSerie.class);
         return datos;
@@ -127,11 +128,19 @@ public class Principal {
 
     }
     private void buscarSerieWeb() {
-        DatosSerie datos = getDatosSerie();
-        Serie serie = new Serie(datos);
-        repositorio.save(serie);
-//        datosSeries.add(datos);
-        System.out.println(datos);
+        try {
+            DatosSerie datos = getDatosSerie();
+            if (datos != null) {
+                Serie serie = new Serie(datos);
+                repositorio.save(serie);
+                System.out.println(datos);
+            } else {
+                System.out.println("No se pudo obtener los datos de la serie.");
+            }
+        } catch (Exception e) {
+            System.out.println("Serie ya existe en la base de datos");
+        }
+
     }
 
     private void mostrarSeriesBuscadas() {
